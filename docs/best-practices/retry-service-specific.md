@@ -2,7 +2,7 @@
 title: Azure service retry guidance
 titleSuffix: Best practices for cloud applications
 description: Learn about the retry mechanism features for many Azure services. Retry mechanisms differ because services have different characteristics and requirements.
-author: dragon119
+author: EdPrice-MSFT
 ms.date: 09/16/2020
 ms.topic: conceptual
 ms.service: architecture-center
@@ -44,7 +44,7 @@ The following table summarizes the retry features for the Azure services describ
 > [!NOTE]
 > For most of the Azure built-in retry mechanisms, there is currently no way apply a different retry policy for different types of error or exception. You should configure a policy that provides the optimum average performance and availability. One way to fine-tune the policy is to analyze log files to determine the type of transient faults that are occurring.
 
-<!-- markdownlint-disable MD024 MD033 -->
+<!-- markdownlint-disable MD024 -->
 
 ## Azure Active Directory
 
@@ -55,7 +55,7 @@ Azure Active Directory (Azure AD) is a comprehensive identity and access managem
 
 ### Retry mechanism
 
-There is a built-in retry mechanism for Azure Active Directory in the [Microsoft Authentication Library (MSAL) ](/azure/active-directory/develop/msal-overview). To avoid unexpected lockouts, we recommend that third-party libraries and application code do **not** retry failed connections, but allow MSAL to handle retries.
+There is a built-in retry mechanism for Azure Active Directory in the [Microsoft Authentication Library (MSAL)](/azure/active-directory/develop/msal-overview). To avoid unexpected lockouts, we recommend that third-party libraries and application code do **not** retry failed connections, but allow MSAL to handle retries.
 
 ### Retry usage guidance
 
@@ -63,13 +63,13 @@ Consider the following guidelines when using Azure Active Directory:
 
 - When possible, use the MSAL library and the built-in support for retries.
 - If you are using the REST API for Azure Active Directory, retry the operation if the result code is 429 (Too Many Requests) or an error in the 5xx range. Do not retry for any other errors.
-- For 429 errors, only retry after the time indicated in the **Retry-After** header.  
-- For 5xx errors, use exponential back-off, with the first retry at least 5 seconds after the response. 
-- Do not retry on errors other than 429 and 5xx. 
+- For 429 errors, only retry after the time indicated in the **Retry-After** header.
+- For 5xx errors, use exponential back-off, with the first retry at least 5 seconds after the response.
+- Do not retry on errors other than 429 and 5xx.
 
 ### More information
 
-- [Microsoft Authentication Library (MSAL) ](/azure/active-directory/develop/msal-overview)
+- [Microsoft Authentication Library (MSAL)](/azure/active-directory/develop/msal-overview)
 
 ## Cosmos DB
 
@@ -77,51 +77,11 @@ Cosmos DB is a fully managed multi-model database that supports schemaless JSON 
 
 ### Retry mechanism
 
-The `CosmosClient` class automatically retries failed attempts. To set the number of retries and the maximum wait time, configure [CosmosClientOptions][cosmosClientOptions]. Exceptions that the client raises are either beyond the retry policy or are not transient errors.
-If Cosmos DB throttles the client, it returns an HTTP 429 error. Check the status code in the `CosmosException` class.
-
-### Policy configuration
-
-The following table shows the default settings for the `CosmosClientOptions` class.
-
-| Setting | Default value | Description |
-| --- | --- | --- |
-| MaxRetryAttemptsOnRateLimitedRequests |9 |The maximum number of retries if the request fails because Cosmos DB applied rate limiting on the client. |
-| MaxRetryWaitTimeOnRateLimitedRequests |30 |The maximum retry time in seconds for the Azure Cosmos DB service. |
-
-### Example
-
-```csharp
-CosmosClient cosmosClient = new CosmosClient("connection-string", new CosmosClientOptions()
-{
-    MaxRetryAttemptsOnRateLimitedRequests = 5,
-    MaxRetryWaitTimeOnRateLimitedRequests = TimeSpan.FromSeconds(15)
-});
-
-```
+The Cosmos DB SDKs automatically retry on certain error conditions, and user applications are encouraged to have their own retry policies. See the [guide to designing resilient applications with Azure Cosmos DB SDKs](/azure/cosmos-db/sql/conceptual-resilient-sdk-applications) for a complete list of error conditions and when to retry.
 
 ### Telemetry
 
-Retry attempts are logged as unstructured trace messages through a .NET **TraceSource**. You must configure a **TraceListener** to capture the events and write them to a suitable destination log.
-
-For example, if you add the following to your App.config file, traces will be generated in a text file in the same location as the executable:
-
-```xml
-<configuration>
-  <system.diagnostics>
-    <switches>
-      <add name="SourceSwitch" value="Verbose"/>
-    </switches>
-    <sources>
-      <source name="DocDBTrace" switchName="SourceSwitch" switchType="System.Diagnostics.SourceSwitch" >
-        <listeners>
-          <add name="MyTextListener" type="System.Diagnostics.TextWriterTraceListener" traceOutputOptions="DateTime,ProcessId,ThreadId" initializeData="CosmosDBTrace.txt"></add>
-        </listeners>
-      </source>
-    </sources>
-  </system.diagnostics>
-</configuration>
-```
+Depending on the language of your application, diagnostics and telemetry are exposed as logs or promoted properties on the operation responses. For more information, see the "Capture the diagnostics" section in [Cosmos DB C# SDK](/azure/cosmos-db/sql/troubleshoot-dot-net-sdk-slow-request?#capture-diagnostics) and [Cosmos DB Java SDK](/azure/cosmos-db/sql/troubleshoot-java-sdk-v4-sql?tabs=async#capture-the-diagnostics).
 
 ## Event Hubs
 
@@ -514,7 +474,6 @@ namespace RetryCodeSamples
                         maxBackoff: TimeSpan.FromSeconds(30),
                         maxRetryCount: 3);
 
-
                 // Policies cannot be specified on a per-operation basis.
                 var session = await messagingFactory.AcceptMessageSessionAsync();
             }
@@ -522,7 +481,6 @@ namespace RetryCodeSamples
             {
                 var client = messagingFactory.CreateQueueClient(QueueName);
                 // The client inherits the policy from the factory that created it.
-
 
                 // Set different values for the retry policy on the client.
                 client.RetryPolicy =
@@ -864,9 +822,7 @@ Azure Storage services include blob storage, files, and storage queues.
 
 ### Blobs, Queues and Files
 
-The ClientOptions Class is the base type for all client option types and exposes various common client options like Diagnostics, Retry, Transport. To provide the client configuration options for connecting to Azure Queue, Blob, and File Storage you must use the corresponding derived type.
-In the next example, you use the QueueClientOptions class (derived from ClientOptions) to configure a client to connect to Azure Queue Service. The Retry property is the set of options that can be specified to influence how retry attempts are made, and how a failure is eligible to be retried.
-
+The ClientOptions Class is the base type for all client option types and exposes various common client options like Diagnostics, Retry, Transport. To provide the client configuration options for connecting to Azure Queue, Blob, and File Storage you must use the corresponding derived type. In the next example, you use the QueueClientOptions class (derived from ClientOptions) to configure a client to connect to Azure Queue Service. The Retry property is the set of options that can be specified to influence how retry attempts are made, and how a failure is eligible to be retried.
 
 ```csharp
 using System;
@@ -901,7 +857,6 @@ namespace RetryCodeSamples
                     // Otherwise, subsequent retries will alternate back and forth between primary and secondary Uri.
                 };
 
-
                 Uri queueServiceUri = new Uri("https://storageaccount.queue.core.windows.net/");
                 string accountName = "Storage account name";
                 string accountKey = "storage account key";
@@ -915,7 +870,6 @@ namespace RetryCodeSamples
                 // Return an async collection of queues in the storage account.
                 var queues = serviceClient.GetQueuesAsync(QueueTraits.None, null, cancellationToken);
 ```
-
 
 ### Table Support
 
@@ -1124,7 +1078,7 @@ Consider the following when accessing Azure or third-party services:
 - The transient detection logic will depend on the actual client API you use to invoke the REST calls. Some clients, such as the newer **HttpClient** class, will not throw exceptions for completed requests with a non-success HTTP status code.
 
 - The HTTP status code returned from the service can help to indicate whether the failure is transient. You may need to examine the exceptions generated by a client or the retry framework to access the status code or to determine the equivalent exception type. The following HTTP codes typically indicate that a retry is appropriate:
-  
+
   - 408 Request Timeout
   - 429 Too Many Requests
   - 500 Internal Server Error
@@ -1177,7 +1131,7 @@ The following are the typical types of retry strategy intervals:
 
 ### Transient fault handling with Polly
 
-[Polly](http://thepollyproject.org) is a library to programmatically handle retries and [circuit breaker](../patterns/circuit-breaker.md) strategies. The Polly project is a member of the [.NET Foundation][dotnet-foundation]. For services where the client does not natively support retries, Polly is a valid alternative and avoids the need to write custom retry code, which can be hard to implement correctly. Polly also provides a way to trace errors when they occur, so that you can log retries.
+[Polly](http://thepollyproject.org) is a library to programmatically handle retries and [circuit breaker](../patterns/circuit-breaker.yml) strategies. The Polly project is a member of the [.NET Foundation][dotnet-foundation]. For services where the client does not natively support retries, Polly is a valid alternative and avoids the need to write custom retry code, which can be hard to implement correctly. Polly also provides a way to trace errors when they occur, so that you can log retries.
 
 ### More information
 
@@ -1188,7 +1142,6 @@ The following are the typical types of retry strategy intervals:
 
 [msal]: /azure/active-directory/develop/msal-overview
 [autorest]: https://github.com/Azure/autorest/tree/master/docs
-[CosmosClientOptions]: /dotnet/api/microsoft.azure.cosmos.cosmosclientoptions?view=azure-dotnets&preserve-view=true
 [dotnet-foundation]: https://dotnetfoundation.org
 [redis-cache-troubleshoot]: /azure/redis-cache/cache-how-to-troubleshoot
 [SearchIndexClient]: /dotnet/api/microsoft.azure.search.searchindexclient?view=azure-dotnet&preserve-view=true

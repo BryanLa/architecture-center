@@ -1,6 +1,6 @@
 [!INCLUDE [header_file](../../../includes/sol-idea-header.md)]
 
-This solution outlines a way for IBM mainframe and midrange applications to access remote Azure databases. The approach requires zero or minimal changes in application code. 
+This solution outlines a way for IBM mainframe and midrange applications to access remote Azure databases. The approach requires zero or minimal changes in application code.
 
 IBM Db2 clients and servers use the Distributed Relational Database Architecture (DRDA) protocol to communicate. In this solution, Microsoft Service for DRDA connects Db2 clients to SQL Server–based databases by supporting this protocol.
 
@@ -33,7 +33,7 @@ Various scenarios can benefit from this solution:
    - Azure SQL Database, which offers the benefits of a fully managed platform as a service (PaaS).
    - SQL Server on Azure Virtual Machines. As an infrastructure as a service (IaaS) offering, this service provides a customizable database engine.
    - SQL Server, a database engine for structured and unstructured data.
-   
+
    These database services can also form the core of business intelligence solutions that offer analytics and insights.
 
 ### Components
@@ -53,6 +53,14 @@ This solution uses the following components. See the [Azure pricing calculator][
 - [HIS][What is HIS] software connects IBM systems with Azure systems. HIS runs on an on-premises or Azure VM. HIS provides integration services for networks, data, applications, messaging, and security features.
 
 - [Microsoft Service for DRDA][Microsoft Service for DRDA] is a component of HIS. Microsoft Service for DRDA is an Application Server (AS) that DRDA Application Requester (AR) clients use. Examples of DRDA AR clients include IBM Db2 for z/OS and Db2 for i5/OS. These clients use the AS to convert Db2 SQL statements and run them on SQL Server.
+
+## Contributors
+
+*This article is maintained by Microsoft. It was originally written by the following contributors.*
+
+Principal author:
+
+ * [Ashish Khandelwal](https://www.linkedin.com/in/ashish-khandelwas-839a851a3) | Senior Engineering Architect
 
 ## Next steps
 
@@ -76,13 +84,13 @@ This solution uses the following components. See the [Azure pricing calculator][
 - [Modernize mainframe and midrange data][Modernize mainframe and midrange data]
 - [Migrate IBM mainframe applications to Azure with TmaxSoft OpenFrame][Migrate IBM mainframe applications to Azure with TmaxSoft OpenFrame]
 
-[Azure Database Migration Guides]: /data-migration/
+[Azure Database Migration Guides]: /data-migration
 [Azure pricing calculator]: https://azure.microsoft.com/pricing/calculator
 [Configuring DB2 for z-OS]: /host-integration-server/core/configuring-db2-for-z-os
 [Configuring SQL Server Connections]: /host-integration-server/core/configuring-sql-server-connections
 [DRDA]: https://en.wikipedia.org/wiki/DRDA
 [Email address for information on mainframe modernization]: mailto:datasqlninja@microsoft.com
-[Five reasons a data-first strategy works]: https://resources.syniti.com/data-quality/5-reasons-a-data-first-strategy-works
+[Five reasons a data-first strategy works]: http://www.enterpriseappstoday.com/data-management/5-reasons-a-data-first-strategy-works.html
 [Install and configure HIS 2020]: /host-integration-server/install-and-config-guides/installing-his-2020
 [Mainframe file replication and sync on Azure]: ./mainframe-azure-file-replication.yml
 [Microsoft Service for DRDA]: /host-integration-server/what-is-his#Data
@@ -91,7 +99,7 @@ This solution uses the following components. See the [Azure pricing calculator][
 [Modernize mainframe and midrange data]: ../../reference-architectures/migration/modernize-mainframe-data-to-azure.yml
 [Planning and Architecting Solutions Using Microsoft Service for DRDA]: /host-integration-server/core/planning-and-architecting-solutions-using-microsoft-service-for-drda
 [Replicate and sync mainframe data in Azure]: ../../reference-architectures/migration/sync-mainframe-data-with-azure.yml
-[SQL Server technical documentation]: /sql/sql-server/
+[SQL Server technical documentation]: /sql/sql-server
 [Visio version of architecture diagram]: https://arch-center.azureedge.net/US-1826653-PR-2782-mainframe-access-azure-databases-architecture.vsdx
 [What is Azure SQL Database?]: /azure/azure-sql/database/sql-database-paas-overview
 [What is Azure SQL?]: /azure/azure-sql/azure-sql-iaas-vs-paas-what-is-overview

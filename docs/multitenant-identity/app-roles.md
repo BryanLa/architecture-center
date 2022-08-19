@@ -1,7 +1,7 @@
 ---
 title: Application roles
 description: Learn how to perform authorization by using Azure AD application roles, which are used to assign permissions to users.
-author: doodlemania2
+author: EdPrice-MSFT
 ms.date: 10/06/2021
 ms.topic: conceptual
 ms.service: architecture-center
@@ -170,8 +170,8 @@ Drawbacks:
 
 <!-- links -->
 
-[tailspin]: ./tailspin.md
+[tailspin]: ./tailspin.yml
 [authorization]: ./authorize.md
-[Securing a backend web API]: ./web-api.md
+[Securing a backend web API]: ./web-api.yml
 [application manifest]: /azure/active-directory/active-directory-application-manifest
 [sample application]: https://github.com/mspnp/multitenant-saas-guidance

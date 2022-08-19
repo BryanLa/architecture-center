@@ -1,6 +1,6 @@
 This article provides guidelines for running SAS analytics workloads on Azure. It covers various deployment scenarios. For instance, multiple versions of SAS are available. You can run SAS software on self-managed virtual machines (VMs). You can also deploy container-based versions by using Azure Kubernetes Service (AKS).
 
-Along with discussing different implementations, this guide also aligns with [Microsoft Azure Well-Architected Framework](../../framework/index.md) tenets for achieving excellence in the areas of cost, DevOps, resiliency, scalability, and security. But besides using this guide, consult with a SAS team for additional validation of your particular use case.
+Along with discussing different implementations, this guide also aligns with [Microsoft Azure Well-Architected Framework](/azure/architecture/framework/index) tenets for achieving excellence in the areas of cost, DevOps, resiliency, scalability, and security. But besides using this guide, consult with a SAS team for additional validation of your particular use case.
 
 [As partners](https://news.microsoft.com/2020/06/15/sas-and-microsoft-partner-to-further-shape-the-future-of-analytics-and-ai/), Microsoft and SAS are working to develop a roadmap for organizations that innovate in the cloud. Both companies are committed to ensuring high-quality deployments of SAS products and solutions on Azure.
 
@@ -172,7 +172,7 @@ SAS has specific fully qualified domain name (FQDN) requirements for VMs. Set ma
 
 > [!NOTE]
 > Turn on accelerated networking on all nodes in the SAS deployment. When you turn this feature off, performance suffers significantly.
->  
+>
 > To turn on accelerated networking on a VM, follow these steps:
 >
 > 1. Run this command in the Azure CLI to deallocate the VM:
@@ -314,6 +314,19 @@ Manage remote access to your VMs through [Azure Bastion](https://azure.microsoft
 - VMs
 - Secure Shell Protocol (SSH) ports
 - Remote Desktop Protocol (RDP) ports
+
+## Contributors
+
+*This article is maintained by Microsoft. It was originally written by the following contributors.* 
+
+Principal authors:
+- [Kevin Raines](https://www.linkedin.com/in/kevingraines) | Director of Azure Marketing
+- [David Baumgarten](https://www.linkedin.com/in/baumgarten-david) | Senior Cloud Solution Architect
+
+Other contributors:
+- [Roeland Nieuwenhuis](https://www.linkedin.com/in/roelandnieuwenhuis) | Principal Cloud Solution Architect
+
+*To see non-public LinkedIn profiles, sign in to LinkedIn.*
 
 ## Next steps
 

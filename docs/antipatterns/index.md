@@ -17,10 +17,10 @@ keywords:
   - anti-pattern
   - performance testing
 products:
- - azure
+  - azure
 categories:
- - management-and-governance
- - security
+  - management-and-governance
+  - security
 ---
 
 # Performance testing and antipatterns for cloud applications
@@ -70,6 +70,6 @@ For more about performance tuning, see [Performance tuning a distributed applica
 [ImproperInstantiation]: ./improper-instantiation/index.md
 [MonolithicPersistence]: ./monolithic-persistence/index.md
 [NoCaching]: ./no-caching/index.md
-[NoisyNeighbor]: ./noisy-neighbor/index.md
+[NoisyNeighbor]: ./noisy-neighbor/noisy-neighbor.yml
 [RetryStorm]: ./retry-storm/index.md
 [SynchronousIO]: ./synchronous-io/index.md

@@ -1,8 +1,10 @@
 ---
-title: Choosing a data storage technology
+title: Choose a data storage technology
 description: Compare big data storage technology options in Azure, including key selection criteria and a capability matrix.
-author: doodlemania2
-ms.date: 11/19/2020
+author: EdPrice-MSFT
+mas.author: architectures
+categories: azure
+ms.date: 07/25/2022
 ms.topic: conceptual
 ms.service: architecture-center
 ms.subservice: azure-guide
@@ -16,15 +18,11 @@ ms.custom:
 
 <!-- cSpell:ignore VHDs HDFS WASB HMAC POSIX ACLs JDBC -->
 
-# Choosing a big data storage technology in Azure
+# Choose a big data storage technology in Azure
 
 This topic compares options for data storage for big data solutions &mdash; specifically, data storage for bulk data ingestion and batch processing, as opposed to [analytical data stores](./analytical-data-stores.md) or [real-time streaming ingestion](./real-time-ingestion.md).
 
-<!-- markdownlint-disable MD026 -->
-
 ## What are your options when choosing data storage in Azure?
-
-<!-- markdownlint-enable MD026 -->
 
 There are several options for ingesting data into Azure, depending on your needs.
 
@@ -147,7 +145,15 @@ The following tables summarize the key differences in capabilities.
 | Primary database model         | Relational (column store), telemetry, and time series store                                                                                                                     |
 | SQL language support           | Yes                                                                                                                                                                             |
 | Pricing model                  | Elastically scalable cluster instances                                                                                                                                          |
-| Authentication                 | Based on [Azure Active Directory identities](https://github.com/uglide/azure-content/blob/master/articles/active-directory/active-directory-authentication-scenarios.md) |
-| Encryption at rest             | Supported, customer managed keys                                                                                                                                                |                                                                                                                                            |
+| Authentication                 | Based on [Azure Active Directory identities](https://github.com/uglide/azure-content/blob/master/articles/active-directory/active-directory-authentication-scenarios.md) |
+| Encryption at rest             | Supported, customer managed keys                                                                                                                                                |                                                                                                                                            
 | Analytics workload performance | Optimized performance for parallel analytics workloads                                                                                                                         |
 | Size limits                    | Linearly scalable               |
+
+## Contributors
+
+*This article is maintained by Microsoft. It was originally written by the following contributors.*
+
+Principal author:
+
+- [Zoiner Tejada](https://www.linkedin.com/in/zoinertejada) | CEO and Architect

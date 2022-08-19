@@ -2,15 +2,20 @@ This article provides insights on designing, sizing, and implementing a Microsof
 
 [FSLogix](/fslogix/) is a set of solutions that enhance, enable, and simplify non-persistent Windows computing environments. FSLogix solutions are appropriate for virtual environments in both public and private clouds. These solutions may also be used to create more portable computing sessions when using physical devices.
 
-For combining FSLogix with Azure Virtual Desktop as a desktop virtualization solution on Azure, store your profiles on either [Azure Files](/azure/storage/files/storage-files-introduction) or [Azure NetApp Files](/azure/azure-netapp-files/azure-netapp-files-introduction) as described in [Storage options for FSLogix profile containers in Azure Virtual Desktop](/azure/virtual-desktop/store-fslogix-profile). This way you can leverage another Azure platform service that requires zero infrastructure, and simplify management of your storage environment.
+For combining FSLogix with Azure Virtual Desktop as a desktop virtualization solution on Azure, store your profiles on either [Azure Files](/azure/storage/files/storage-files-introduction) or [Azure NetApp Files](/azure/azure-netapp-files/azure-netapp-files-introduction) as described in [Storage options for FSLogix profile containers in Azure Virtual Desktop](/azure/virtual-desktop/store-fslogix-profile). This way you can utilize another Azure platform service that requires zero infrastructure, and simplify management of your storage environment.
 
 ## FSLogix filter driver architecture
 
 It's common to copy a profile to and from the network, when a user signs in and out of a remote environment. Because user profiles can often be large, sign in and sign out times often became unacceptable. FSLogix Containers redirect user profiles to a network location. Profiles are placed in VHDx files and mounted at run time. Mounting and using a profile on the network eliminates delays often associated with solutions that copy files.
 
-The conceptual architecture diagram below shows how FSLogix works within the operating system. The Windows Service agent needs to be installed in the VDI image. Once the installation is completed, two filter drivers are injected into the operating system. Thereafter, you can set appropriate registry (or [ADMX](/microsoft-edge/deploy/managing-group-policy-admx-files)) entries, to place a VHDx container on a file system or [SMB](https://en.wikipedia.org/wiki/Server_Message_Block) share location (Azure Storage as shown in the diagram below).
+![Diagram showing the FSLogix conceptual architecture.](./images/fslogix-concept.png)
 
-![FSLogix conceptual architecture](./images/fslogix-concept.png)
+*Download a [Visio file](https://arch-center.azureedge.net/windows-virtual-desktop-fslogix.vsdx) of this architecture.*
+
+The conceptual architecture diagram above shows how FSLogix works within the operating system:
+* The Windows Service agent needs to be installed in the VDI image.
+* Once the installation is completed, two filter drivers are injected into the operating system.
+* You can then set the appropriate registry (or [ADMX](/microsoft-edge/deploy/managing-group-policy-admx-files)) entries, to place a VHDx container on a file system or [SMB](https://en.wikipedia.org/wiki/Server_Message_Block) share location (Azure Storage, as shown in the diagram above).
 
 ## Profile Container and Office Container
 
@@ -21,7 +26,6 @@ The Office Container is a subset of Profile Container. Although all of the benef
 Profile Container is used to redirect the full user profile. Profile Container is used in non-persistent, virtual environments, such as Virtual Desktops. When using Profile Container, the entire user profile is captured, except for data that is [excluded](/fslogix/manage-profile-content-cncpt).
 
 There are several reasons why Profile Container and Office Container may be used together. For more information, read the comparison of [Profile Container vs. Office Container](/fslogix/profile-container-office-container-cncpt).
-
 
 ### Multiple profile connections
 
@@ -41,7 +45,7 @@ Be aware of the following limitations of a multiple connection deployment:
 
 In terms of overall profile size, limitations or quotas for FSLogix depend on the storage type used for the user profile VHDx files, as well as the size limitations of the VHD/VHDx format.
 
-For network bandwidth, depending on the type of utilization it is recommended to plan between 5 and 30 MbPS per user. 
+For network bandwidth, depending on the type of utilization it is recommended to plan between 5 and 30 MbPS per user.
 
 Additionally, the following table gives an example of how many resources an FSLogix profile needs to support each user. Requirements can vary widely depending on the user, applications, and activity on each profile, so your actual usage may vary significantly from what is listed here. The table uses an example a single user. Use this to estimate requirements for the total number of users in your environment. For example, you may need around 1,000 IOPS (input/output operations per second) for 100 users, and around 5,000 IOPS during sign-in and sign-out, if a large number of users login during a short period of time creating a *login storm*.
 
@@ -78,7 +82,9 @@ The following list describes some important things to keep in mind when using Az
 - With the FSLogix [ObjectSpecific](/fslogix/configure-per-user-per-group-ht) per-group setting, you can filter different Azure Files storage accounts to accommodate more users. The maximum limit of IOPs per storage account doesn't mean you cannot stack them. This applies to both personal and pooled host pool scenarios. The architecture diagram below explains it in more details.
 - You are able to use multiple storage accounts in one Azure virtual network (VNet). For example, you can assign different network shares to specific groups of users in your environment using AD groups.
 
-![Files scenario](./images/fslogix-files.png)
+:::image type="content" border="false" source="./images/fslogix-files.png" alt-text="Diagram showing Files scenario" lightbox="./images/fslogix-files.png":::
+
+*Download a [Visio file](https://arch-center.azureedge.net/windows-virtual-desktop-fslogix.vsdx) of this architecture.*
 
 The table below shows you how you can further optimize your AVD environment. Detailed information of [Azure Files performance targets](/azure/storage/files/storage-files-scale-targets#file-share-and-file-scale-targets) (*Standard* and [Premium](/azure/storage/files/storage-files-planning#understanding-provisioning-for-premium-file-shares)) and [pricing](https://azure.microsoft.com/pricing/details/storage/files/) is available to help you fine-tune your file-share solution.
 
@@ -99,13 +105,17 @@ Currently, up to 1000 IP connections per active VNet are possible. These are the
 
 If the AVD Windows 10 Multi-session user per vCPU [recommendations](/windows-server/remote/remote-desktop-services/virtual-machine-recs) sizing for the D32as_v4 VM is calculated based on the light or medium workload, more than 120,000 users would fit within 1,000 virtual machines before approaching the 1,000 IP limit, as shown in the following figure.
 
-![NetApp Files pooled scenario](./images/fslogix-netapp-files-pooled.png)
+:::image type="content" border="false" source="./images/fslogix-netapp-files-pooled.png" alt-text="Diagram showing NetApp Files pooled scenario" lightbox="./images/fslogix-netapp-files-pooled.png":::
+
+*Download a [Visio file](https://arch-center.azureedge.net/windows-virtual-desktop-fslogix.vsdx) of this architecture.*
 
 #### Personal scenarios
 
 Users are mapped to specific desktop pods. Each pod has just under 1,000 virtual machines, leaving room for IP addresses propagating from the management VNet. Azure NetApp Files can easily handle 900+ personal desktops per single-session host pool. The actual number of virtual machines is equal to 1,000 minus the number of management hosts found in the Hub VNet.
 
-![NetApp Files personal scenario](./images/fslogix-netapp-files-personal.png)
+:::image type="content" border="false" source="./images/fslogix-netapp-files-personal.png" alt-text="Diagram showing NetApp Files personal scenario" lightbox="./images/fslogix-netapp-files-personal.png":::
+
+*Download a [Visio file](https://arch-center.azureedge.net/windows-virtual-desktop-fslogix.vsdx) of this architecture.*
 
 ## Storage permissions
 
@@ -149,22 +159,21 @@ Make sure to configure the following antivirus exclusions for FSLogix Profile Co
   - %ProgramData%\FSLogix\Cache\\*.VHDX (additional - only if you use Cloud Cache)
   - %ProgramData%\FSLogix\Proxy\\*.VHD (additional - only if you use Cloud Cache)
   - %ProgramData%\FSLogix\Proxy\\*.VHDX (additional - only if you use Cloud Cache)
-  
+
 - Exclude processes:
 
   - %ProgramFiles%\FSLogix\Apps\frxccd.exe
   - %ProgramFiles%\FSLogix\Apps\frxccds.exe
   - %ProgramFiles%\FSLogix\Apps\frxsvc.exe
 
-#### Add exclusions for Microsoft Defender by using PowerShell
+#### Add exclusions for Microsoft Defender for Cloud by using PowerShell
 
-You can use this PowerShell script to add the exclusions for Microsoft Defender:
+You can use this PowerShell script to add the exclusions for Microsoft Defender for Cloud:
 
 ```powershell
   # Defender Exclusions for FSLogix
   $Cloudcache = $false             # Set for true if using cloud cache
-  $StorageAcct = "
-  storageacct"  # Storage Account Name
+  $StorageAcct = "storageacct"     # Storage Account Name
 
   $filelist = `
   "%ProgramFiles%\FSLogix\Apps\frxdrv.sys", `
@@ -218,13 +227,13 @@ Because of the resource utilization, it may be more cost effective to consider a
 
 In an enterprise architecture, it is common to make user profiles resilient. To configure an FSLogix profile solution to be as efficient as possible, the amount of data being moved around should be reduced to the bare minimum:
 
--	The first step to create an efficient FSLogix profile solution is the use of [OneDrive folder backup](/onedrive/redirect-known-folders) to put document-based profile folders into OneDrive. This means you can take advantage of built-in OneDrive features to protect the users' documents.
+- The first step to create an efficient FSLogix profile solution is the use of [OneDrive folder backup](/onedrive/redirect-known-folders) to put document-based profile folders into OneDrive. This means you can take advantage of built-in OneDrive features to protect the users' documents.
 
--	In order to reduce the amount of data needing to be independently replicated, archived, and restored, you should also split out the Office cache data into the O365 disk. This is because the cache data often comprises the vast majority of the profile data capacity that is used. Because the O365 disk only contains cache data (the source for which is safely stored in the cloud), you do not need to make this data resilient. Once the documents and cache are separated from the Profile disk, you should then enact your replication archive and restore policies on this much smaller capacity disk.
+- In order to reduce the amount of data needing to be independently replicated, archived, and restored, you should also split out the Office cache data into the O365 disk. This is because the cache data often comprises the vast majority of the profile data capacity that is used. Because the O365 disk only contains cache data (the source for which is safely stored in the cloud), you do not need to make this data resilient. Once the documents and cache are separated from the Profile disk, you should then enact your replication archive and restore policies on this much smaller capacity disk.
 
--	Azure Files offers the replication option of a storage account fail-over against the other region configured in your storage account redundancy plan. This is only supported for the standard storage account type using Geo-Redundent Storage (GRS). Other options to use are AzCopy or any other file copy mechanism such as *RoboCopy*.
+- Azure Files offers the replication option of a storage account fail-over against the other region configured in your storage account redundancy plan. This is only supported for the standard storage account type using Geo-Redundant Storage (GRS). Other options to use are AzCopy or any other file copy mechanism such as *RoboCopy*.
 
--	Azure NetApp Files offers cross-region replication. With this feature, you are able to replicate your FSLogix file share to another region over the Azure backbone.
+- Azure NetApp Files offers cross-region replication. With this feature, you are able to replicate your FSLogix file share to another region over the Azure backbone.
 
 ## Backup and restore
 
@@ -254,9 +263,17 @@ The following settings are commonly used by our customers in their desktop virtu
 |VolumeType   |VHDx    |More capabilities for PowerShell and maintenance.    |
 |FlipFlopProfileDirectoryName |1    |Makes it easier to search for the specific profile container user folder on the network share.    |
 
-To manage these registry settings at scale, group policy templates are included with the FSlogix installation package.  Guidance for using these templates can be found in the article [Use FSLogix Group Policy Templates](/fslogix/use-group-policy-templates-ht). 
+To manage these registry settings at scale, group policy templates are included with the FSlogix installation package.  Guidance for using these templates can be found in the article [Use FSLogix Group Policy Templates](/fslogix/use-group-policy-templates-ht).
 
 Note: 'FlipFlopProfileDirectoryName' is managed by the 'swap directory name components' setting if using the GPO template.
+
+## Contributors
+
+*This article is maintained by Microsoft. It was originally written by the following contributors.*
+
+Principal author:
+
+ * [Christiaan Brinkhoff](https://www.linkedin.com/in/christiaanbrinkhoff) | Principal PM and Community Lead, Windows 365
 
 ## Next steps
 

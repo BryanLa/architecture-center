@@ -1,9 +1,14 @@
-
-
-
 [!INCLUDE [header_file](../../../includes/sol-idea-header.md)]
 
 An enterprise data warehouse lets you bring together all your data at any scale easily, and to get insights through analytical dashboards, operational reports, or advanced analytics for all your users.
+
+## Potential use cases
+
+This approach can be used to:
+
+- Establish a data warehouse to be a single source of truth for your data.
+- Integrate relational data sources with other unstructured datasets.
+- Use semantic modeling and powerful visualization tools for simpler data analysis.
 
 ## Architecture
 
@@ -11,14 +16,14 @@ An enterprise data warehouse lets you bring together all your data at any scale 
 
 *Download an [SVG](../media/enterprise-data-warehouse.svg) of this architecture.*
 
-## Data flow
+### Dataflow
 
 1. Combine all your structured, unstructured and semi-structured data (logs, files, and media) using Azure Synapse Analytics Pipelines to Azure Blob Storage.
 1. Leverage data in Azure Blob Storage to perform scalable analytics with Azure Synapse Analytics Spark pool and achieve cleansed and transformed data.
 1. Cleansed and transformed data can be combined with existing structured data, creating one hub for all your data with Azure Synapse Analytics.
 1. Build operational reports and analytical dashboards on top of dedicated SQL pool to derive insights from the data, and use Azure Analysis Services to serve thousands of end users.
 
-## Components
+### Components
 
 * [Azure Synapse Analytics](https://azure.microsoft.com/services/synapse-analytics) is the fast, flexible, and trusted cloud data warehouse that lets you scale, compute, and store elastically and independently, with a massively parallel processing architecture.
 * [Synapse Pipelines Documentation](/azure/data-factory/concepts-pipelines-activities) allows you to create, schedule and orchestrate your ETL/ELT workflows.

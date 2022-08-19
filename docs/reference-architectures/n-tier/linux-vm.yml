@@ -3,9 +3,9 @@ metadata:
   title: Run a Linux VM on Azure
   titleSuffix: Azure Reference Architectures
   description: Learn the best practices for running a Linux virtual machine on Azure, which requires some additional components, including networking and storage resources.
-  author: telmosampaio
-  ms.author: pnp
-  ms.date: 12/13/2018
+  author: EdPrice-MSFT
+  ms.author: architectures
+  ms.date: 07/28/2022
   ms.topic: conceptual
   ms.service: architecture-center
   ms.subservice: reference-architecture

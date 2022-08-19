@@ -1,14 +1,15 @@
 
 
-
 When developing web services, you may need to get tokens using the [OAuth 2.0 On-Behalf-Of (OBO) flow](/azure/active-directory/develop/v2-oauth2-on-behalf-of-flow). The OBO flow serves the use case where an application invokes a service or web API, which in turn needs to call another service or web API. OBO propagates the delegated user identity and permissions through the request chain. When an application needs to use access and refresh tokens indefinitely, typically in offline access scenarios, it's critical to store the refresh tokens securely.
 
->[!WARNING]
->Carefully consider the risk and responsibility involved in storing any security tokens, since these tokens can give a malicious actor access to resources protected by the organization's Azure Active Directory (Azure AD). A security breach of an application that targets **Accounts in any organizational directory (Any Azure AD directory - Multitenant)** can be especially disastrous.
+> [!WARNING]
+> Carefully consider the risk and responsibility involved in storing any security tokens, since these tokens can give a malicious actor access to resources protected by the organization's Azure Active Directory (Azure AD). A security breach of an application that targets **Accounts in any organizational directory (Any Azure AD directory - Multitenant)** can be especially disastrous.
 >
->Storing access tokens poses a greater security risk, since an access token in and of itself can access resources. The recommended approach is not to store access tokens, but get the access tokens as needed. Securely store only the refresh tokens, with as much rigor as if they were access tokens.
+> Storing access tokens poses a greater security risk, since an access token in and of itself can access resources. The recommended approach is not to store access tokens, but get the access tokens as needed. Securely store only the refresh tokens, with as much rigor as if they were access tokens.
 >
->If necessary, you can [revoke refresh tokens](/azure/active-directory/develop/access-tokens#token-revocation) if they become compromised.
+> If necessary, you can [revoke refresh tokens](/azure/active-directory/develop/access-tokens#token-revocation) if they become compromised.
+
+## Potential use cases
 
 This solution uses Azure Key Vault, Azure Functions, and Azure DevOps to securely update and store OBO refresh tokens.
 
@@ -16,12 +17,14 @@ This solution uses Azure Key Vault, Azure Functions, and Azure DevOps to securel
 
 ![Diagram showing the key and token refresh processes.](./media/refresh-diagram.png)
 
-- Azure [Key Vault](https://azure.microsoft.com/services/key-vault/) holds secret encryption keys for each [Azure AD](https://azure.microsoft.com/services/active-directory/) tenant.
-- An [Azure Functions](https://azure.microsoft.com/services/functions/) timer-triggered function gets the latest secret key from Key Vault. Another Azure Functions function retrieves the refresh token from the Microsoft identity platform and saves it with the latest secret key version.
-- A database stores the latest encrypted key and opaque data.
-- An [Azure DevOps](https://azure.microsoft.com/services/devops/) continuous delivery pipeline manages and syncs the secret rotation and token refresh processes.
+### Dataflow
 
-[Azure Pipelines](https://azure.microsoft.com/services/devops/pipelines/) is a convenient place to add your key rotation strategy, if you're already using Pipelines for infrastructure-as-code (IaC) or continuous integration and delivery (CI/CD). You don't have to use Azure Pipelines, as long as you limit the paths for setting and retrieving secrets.
+- Azure [Key Vault](https://azure.microsoft.com/services/key-vault) holds secret encryption keys for each [Azure AD](https://azure.microsoft.com/services/active-directory) tenant.
+- An [Azure Functions](https://azure.microsoft.com/services/functions) timer-triggered function gets the latest secret key from Key Vault. Another Azure Functions function retrieves the refresh token from the Microsoft identity platform and saves it with the latest secret key version.
+- A database stores the latest encrypted key and opaque data.
+- An [Azure DevOps](https://azure.microsoft.com/services/devops) continuous delivery pipeline manages and syncs the secret rotation and token refresh processes.
+
+[Azure Pipelines](https://azure.microsoft.com/services/devops/pipelines) is a convenient place to add your key rotation strategy, if you're already using Pipelines for infrastructure-as-code (IaC) or continuous integration and delivery (CI/CD). You don't have to use Azure Pipelines, as long as you limit the paths for setting and retrieving secrets.
 
 Apply the following policy to allow the Service Principal for your Azure DevOps service connection to set secrets in Key Vault. Replace the `<Key Vault Name>` and `<Service Connection Principal>` variables with the correct values for your environment.
 
@@ -43,7 +46,7 @@ In the Azure portal, add a Key Vault access policy to allow the Azure Functions 
 
 ### Azure CLI
 
-You can also set Azure Key Vault policy by using the [Azure CLI](/cli/azure/keyvault?view=azure-cli-latest):
+You can also set Azure Key Vault policy by using the [Azure CLI](/cli/azure/keyvault):
 
 ```azurecli
 az keyvault set-policy --name $<Key Vault Name> --spn $<Service Connection Principal> --secret-permissions set
@@ -52,7 +55,7 @@ az keyvault set-policy --name $<Key Vault Name> --spn $<Managed Identity Princip
 
 ### ARM template
 
-The following [ARM template](/azure/azure-resource-manager/templates/) gives Azure Functions access to Azure Key Vault. Replace the `***` variables with the correct values for your environment.
+The following [ARM template](/azure/azure-resource-manager/templates) gives Azure Functions access to Azure Key Vault. Replace the `***` variables with the correct values for your environment.
 
 ```json
 {
@@ -110,7 +113,7 @@ Using the key is straightforward. The following sequence queries the key based o
 
 ![Diagram that shows the stored token usage sequence.](./media/use-stored-token-sequence.png)
 
-The token refresh is orthogonal to the `DoWork` function, so Azure Functions can perform `DoWork` and token refresh asynchronously by using [Durable Functions](/azure/azure-functions/durable/). For more information about HTTP-triggered functions with Durable Functions, see [HTTP features](/azure/azure-functions/durable/durable-functions-http-features?tabs=csharp).
+The token refresh is orthogonal to the `DoWork` function, so Azure Functions can perform `DoWork` and token refresh asynchronously by using [Durable Functions](/azure/azure-functions/durable). For more information about HTTP-triggered functions with Durable Functions, see [HTTP features](/azure/azure-functions/durable/durable-functions-http-features?tabs=csharp).
 
 It's not recommended to use Azure Key Vault in the HTTP request pipeline, so cache responses whenever reasonable. In the example, Key Vault's response to the `getSecret(secretId, secretVersion)` call is cacheable.
 
@@ -129,6 +132,14 @@ Microsoft Identity Platform offers the ability to revoke refresh tokens in case 
 To remove a user from Azure AD, just remove the user's record. To remove application access per user, remove the `refreshToken` part of the user data.
 
 To remove access for a group of users, such as all users in a target tenant, you can use Azure Pipelines to delete the group's secret based on `secretId()`.
+
+## Contributors
+
+*This article is maintained by Microsoft. It was originally written by the following contributors.*
+
+Principal author:
+
+ * [Jason Mostella](https://www.linkedin.com/in/jasonmostella) | Senior Software Engineer
 
 ## Next steps
 

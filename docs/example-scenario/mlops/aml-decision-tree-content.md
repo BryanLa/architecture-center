@@ -1,6 +1,3 @@
-
-
-
 Microsoft Azure offers a myriad of services and capabilities. Building an end-to-end machine learning pipeline from experimentation to deployment often requires bringing together a set of services from across Azure. While it may be possible to have one pipeline do it all, there are tradeoffs when you don't use the services for what they're best at.
 
 So, then you have to ask the question: When is it worth it to adopt each service for your use case? The answer often depends on different details that are not necessarily related to the functional requirements. The main factors are:
@@ -43,7 +40,7 @@ Listed below are the service options that you should consider for each stage of 
 | Compute | [Databricks](/azure/azure-databricks/what-is-azure-databricks)<br>[Azure Machine Learning Compute](/azure/machine-learning/concept-compute-instance) |
 | Tracking / Versioning options | Experiment/Hyper-tuning Tracking:<br><ul>[Azure Machine Learning Experiments](/azure/machine-learning/studio/create-experiment)<br>[Databricks and MLFLow Tracking](https://docs.databricks.com/applications/mlflow/quick-start.html)</ul><br>[Data Versioning/Data Drift: Azure Machine Learning Datasets](/azure/machine-learning/how-to-version-track-datasets)<br><br>Model Versioning:<ul>[Azure Machine Learning Model Management Service](/azure/machine-learning/concept-model-management-and-deployment)<br>[Databricks and MLFlow Model Registry](https://databricks.com/blog/2019/10/17/introducing-the-mlflow-model-registry.html)<br></ul> |
 | Model Training | [Azure Machine Learning Pipelines](/azure/machine-learning/concept-ml-pipelines)<br>[Databricks](https://docs.databricks.com/data/index.html) |
-| Model Deployment | [Batch Scoring in Azure Machine Learning Pipeline](/azure/machine-learning/tutorial-pipeline-batch-scoring-classification)<br>[Real-time Deployment in Azure Machine Learning Service](/azure/machine-learning/how-to-deploy-and-where)<ul>[Azure Kubernetes Service (AKS)](/azure/aks/intro-kubernetes)<br>[Azure Container Instance](/azure/container-instances/)<br>[Azure App Service](/azure/app-service/)<br>[Azure Functions](/azure/azure-functions/)<br>[IoT Edge](/azure/iot-edge/about-iot-edge)<br>[Azure Machine Learning Model Deployment](/azure/machine-learning/how-to-deploy-and-where)</ul> |
+| Model Deployment | [Batch Scoring in Azure Machine Learning Pipeline](/azure/machine-learning/tutorial-pipeline-batch-scoring-classification)<br>[Real-time Deployment in Azure Machine Learning Service](/azure/machine-learning/how-to-deploy-managed-online-endpoints)<ul>[Azure Kubernetes Service (AKS)](/azure/aks/intro-kubernetes)<br>[Azure Container Instance](/azure/container-instances/)<br>[Azure App Service](/azure/app-service/)<br>[Azure Functions](/azure/azure-functions/)<br>[IoT Edge](/azure/iot-edge/about-iot-edge)<br>[Azure Machine Learning Model Deployment](/azure/machine-learning/how-to-deploy-managed-online-endpoints)</ul> |
 | Monitoring | [Azure Monitor](/azure/azure-monitor/overview)<ul>[Application Insights](/azure/azure-monitor/app/app-insights-overview)<br>[Azure Dashboards](/azure/azure-monitor/learn/tutorial-app-dashboards)</ul>[Power BI](/power-bi/service-azure-and-power-bi) |
 
 ## Use No Code or Code implementation approach
@@ -64,19 +61,19 @@ If you don't want to code your own solutions, a set of tools is available for bu
 
 * For monitoring, use Azure Monitor with Azure Dashboards, which lets you click to pin visuals and set up alerts without code. For more configuration, you can use Power BI to create historical dashboards.
 
-The primary issue you’ll come across here is that you must work within the constraints of the services. However, if your use case fits within these limitations, these services could be a good solution for you. They're always evolving and their capabilities will expand over time. So you should familiarize yourself with their latest features at the time you consider them. This diagram summarizes the process for the No Code option.
+The primary issue you'll come across here is that you must work within the constraints of the services. However, if your use case fits within these limitations, these services could be a good solution for you. They're always evolving and their capabilities will expand over time. So you should familiarize yourself with their latest features at the time you consider them. This diagram summarizes the process for the No Code option.
 
 ![no code option process diagram](./media/dt-no-code-option.png)
 
 ### Code
 
-If you want to code or need the flexibility that a coded solution offers, all of the options described have a “code-like” interface. The options also have a representation of processing logic that you can export to JSON or YAML format and check in the exported files to a code repository. From there, deployment is handled through Azure DevOps or scripts. This diagram summarizes the Code option process.
+If you want to code or need the flexibility that a coded solution offers, all of the options described have a "code-like" interface. The options also have a representation of processing logic that you can export to JSON or YAML format and check in the exported files to a code repository. From there, deployment is handled through Azure DevOps or scripts. This diagram summarizes the Code option process.
 
 ![code option process diagram](./media/dt-code-option.png)
 
 ## Experimentation: Notebooks vs. Python/R scripts
 
-Depending on the skillsets or comfort level of your team’s data scientists/engineers with notebooks or plain scripts, there are choices for experimentation that support both options.
+Depending on the skillsets or comfort level of your team's data scientists/engineers with notebooks or plain scripts, there are choices for experimentation that support both options.
 
 ### Notebooks
 
@@ -163,7 +160,7 @@ This table adds scheduling options to the triggers.
 | Azure Monitor | Application Insights<br>Azure Dashboards |
 | Power BI | Analytics and Reports |
 
-## Resources
+## Related resources
 
 * [Technical Paper: MLOps framework to upscale machine learning lifecycle with Azure Machine Learning](mlops-technical-paper.yml)
 * [MLOps maturity model](mlops-maturity-model.yml)

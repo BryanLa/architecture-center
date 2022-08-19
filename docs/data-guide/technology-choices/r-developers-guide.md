@@ -3,13 +3,18 @@ title: R developer&apos;s guide - R programming
 description: Learn about the Azure services that support the R programming language and how R developers can use them to extend their data science workloads into the cloud.
 services: machine-learning
 author: AnalyticJeremy
+categories: azure
 ms.author: jepeach
 ms.date: 04/02/2020
 ms.topic: conceptual
 ms.service: architecture-center
 ms.subservice: cloud-fundamentals
-ms.workload: data-services
+ms.workload:
+  - data-services
 ms.devlang: R
+azureCategories:
+  - ai-machine-learning
+  - analytics
 products:
   - azure-machine-learning
   - azure-data-science-vm
@@ -39,7 +44,6 @@ This article covers the following Azure services that support the R language:
 |[ML Services on HDInsight](#ml-services-on-hdinsight)            |cluster-based system for running R analyses on large datasets across many nodes   |
 |[Azure Databricks](#azure-databricks)                            |collaborative Spark environment that supports R and other languages               |
 |[Azure Machine Learning](#azure-machine-learning)                | cloud service that you use to train, deploy, automate, and manage machine learning models
-|[Azure Machine Learning Studio (classic)](#azure-machine-learning-studio)  |run custom R scripts in Azure's machine learning experiments                      |
 |[Azure Batch](#azure-batch)                                      |offers a variety options for economically running R code across many nodes in a cluster|
 |[Azure SQL Managed Instance](#azure-sql-managed-instance)        |run R and Python scripts inside of the SQL Server database engine                  |
 
@@ -67,13 +71,12 @@ To learn more about the DSVM, see [Introduction to Azure Data Science Virtual Ma
 
 ## ML Services on HDInsight
 
-[Microsoft ML Services](/azure/hdinsight/r-server/r-server-overview) provide data scientists, statisticians, and R programmers with on-demand access to scalable, distributed methods of analytics on HDInsight.  This solution provides the latest capabilities for R-based analytics on datasets of virtually any size, loaded to either Azure Blob or Data Lake storage.
+[Microsoft ML Services](https://azure.microsoft.com/services/hdinsight/r-server/#overview) provide data scientists, statisticians, and R programmers with on-demand access to scalable, distributed methods of analytics on HDInsight.  This solution provides the latest capabilities for R-based analytics on datasets of virtually any size, loaded to either Azure Blob or Data Lake storage.
 
 This is an enterprise-grade solution that allows you to scale your R code across a cluster.  By using functions in Microsoft's [`RevoScaleR`](/machine-learning-server/r-reference/revoscaler/revoscaler) package, your R scripts on HDInsight can run data processing functions in parallel across many nodes in a cluster.  This allows R to crunch data on a much larger scale than is possible with single-threaded R running on a workstation.
 
 This ability to scale makes ML Services on HDInsight a great option for R developers with massive data sets.  It provides a flexible and scalable platform for running your R scripts in the cloud.
-
-For a walk-through on creating an ML Services cluster, see [Get started with ML Services on Azure HDInsight](/azure/hdinsight/r-server/r-server-get-started).
+For a walkthrough on creating an ML Services cluster, see [Get started with ML Services on Azure HDInsight](https://azure.microsoft.com/services/hdinsight/r-server/#getting-started).
 
 ## Azure Databricks
 
@@ -90,14 +93,6 @@ The article [What is Azure Databricks?](/azure/azure-databricks/what-is-azure-da
 [Azure Machine Learning](/azure/machine-learning/) can be used for any kind of machine learning, from classical machine learning to deep learning, supervised and unsupervised learning. Whether you prefer to write Python or R code or zero-code/low-code options such as the designer, you can build, train and track highly accurate machine learning and deep-learning models in an Azure Machine Learning Workspace.
 
 Start training on your local machine and then scale out to the cloud. [Train your first model in R](/azure/machine-learning/service/tutorial-1st-r-experiment) with Azure Machine Learning today.
-
-## <a name="azure-machine-learning-studio"></a>Azure Machine Learning Studio (classic)
-
-[Azure Machine Learning Studio (classic)](https://azure.microsoft.com/services/machine-learning-studio/) is a collaborative, drag-and-drop tool you can use to build, test, and deploy predictive analytics solutions in the cloud.  It enables emerging data scientists to create and deploy machine learning models without the need to write much code.
-
-Azure Machine Learning Studio (classic) supports both R and Python.  
-
-Customers currently using or evaluating Azure Machine Learning Studio (classic) are encouraged to try the designer in Azure Machine Learning, which provides drag-n-drop ML modules plus scalability, version control, and enterprise security.
 
 ## Azure Batch
 
